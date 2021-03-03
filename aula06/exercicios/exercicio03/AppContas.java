@@ -16,7 +16,7 @@ public class AppContas {
             System.out.println("Falha na operação");
         }
         
-        if (cp.saque(99)) {
+        if (cp.saque(25)) {
             System.out.println("Saque realizado");
         } else {
             System.out.println("Saldo insuficiente");
