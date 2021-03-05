@@ -7,10 +7,13 @@
     <title>Pagina inicial</title>
     <script src="/js/consulta.js"></script>
 </head>
-<body>
+<body onload="validaLogin()">
+    <div id="dadosUser"></div>
+    <br>
     <input type="text" id="chave">
     <button onclick="consultaUsuario()">consultar</button>
     <br>
+    <button onclick="logout()">Logout</button>
     <div id="saida"></div>
 </body>
 </html>

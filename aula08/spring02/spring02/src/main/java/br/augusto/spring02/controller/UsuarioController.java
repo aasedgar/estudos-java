@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 import br.augusto.spring02.dto.UsuarioDTO;
+import br.augusto.spring02.model.Compra;
 import br.augusto.spring02.model.Usuario;
 import br.augusto.spring02.repository.UsuarioRepo;
 
@@ -39,6 +40,21 @@ public class UsuarioController {
         return ResponseEntity.notFound().build();   // notFound = 404 quando não tem conteudo dentro do .ok /.notFound precisa do .build
     }
 
+    @GetMapping("/compras/{id}") // {id} é o nome da variável
+    public ResponseEntity<List<Compra>> obterComprasDoUsuarioPorId(@PathVariable int id) {    // referencia a variável {id} do GgetMapping        
+        Usuario usuarioEncontrado = repo.findById(id).orElse(null); // findById busca pela chave primária
+        
+        if (usuarioEncontrado != null) {
+            List<Compra> compras = usuarioEncontrado.getCompras();
+            for (Compra compra : compras) {
+                compra.setUsuario(null);
+            }
+            return ResponseEntity.ok(compras);    // ok = 200
+        }
+        
+        return ResponseEntity.notFound().build();   // notFound = 404 quando não tem conteudo dentro do .ok /.notFound precisa do .build
+    }
+
     @GetMapping("/all")
     public ResponseEntity<List<Usuario>> listarUsuarios() {
         List<Usuario> lista = (List<Usuario>) repo.findAll();   //findAll = listar todos
@@ -55,7 +71,19 @@ public class UsuarioController {
             return ResponseEntity.ok(userFound);
         }
         return ResponseEntity.status(404).build();  // Not Found
+    }
 
+    @PostMapping("/login")
+    public ResponseEntity<UsuarioDTO> login(@RequestBody Usuario user) {    // no corpo da requisição virá um usuário
+        Usuario userFound = repo.findByEmailOrCpf(user.getEmail(), user.getCpf());
+
+        if (userFound != null) {
+            if (user.getSenha().equals(userFound.getSenha())) {                
+                UsuarioDTO userDTO = new UsuarioDTO(userFound);
+                return ResponseEntity.ok(userDTO);
+            }
+        }
+        return ResponseEntity.status(404).build();  // Not Found
     }
 
 }

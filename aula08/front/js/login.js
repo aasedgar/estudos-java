@@ -4,6 +4,7 @@ function login() {
 
     let usuario = {
         email:user,
+        cpf:user,
         senha:senha
     }
 
@@ -15,7 +16,7 @@ function login() {
         }
     }
 
-    fetch("http://localhost:8080/user/loginemail", mensagem)
+    fetch("http://localhost:8080/user/login", mensagem)
         .then(res => validaLogin(res))
     
 }
@@ -24,7 +25,7 @@ function validaLogin(resultado) {
     if (resultado.status == 200) {
         resultado.json().then(res => efetuaLogin(res))
     } else {
-        console.log("falha no login")
+        document.getElementById("msgError").innerHTML = "Usuário/senha inválido"
     }
 }
 
