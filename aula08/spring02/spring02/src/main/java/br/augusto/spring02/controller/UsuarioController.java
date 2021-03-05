@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+
+import br.augusto.spring02.dto.UsuarioDTO;
 import br.augusto.spring02.model.Usuario;
 import br.augusto.spring02.repository.UsuarioRepo;
 
@@ -25,12 +27,13 @@ public class UsuarioController {
     private UsuarioRepo repo;
 
     @GetMapping("/id/{id}") // {id} é o nome da variável
-    public ResponseEntity<Usuario> obterUsuarioPorId(@PathVariable int id) {    // referencia a variável {id} do GgetMapping
+    public ResponseEntity<UsuarioDTO> obterUsuarioPorId(@PathVariable int id) {    // referencia a variável {id} do GgetMapping
         
         Usuario usuarioEncontrado = repo.findById(id).orElse(null); // findById busca pela chave primária
         
         if (usuarioEncontrado != null) {
-            return ResponseEntity.ok(usuarioEncontrado);    // ok = 200
+            UsuarioDTO userDTO = new UsuarioDTO(usuarioEncontrado); // usando DTO
+            return ResponseEntity.ok(userDTO);    // ok = 200
         }
         
         return ResponseEntity.notFound().build();   // notFound = 404 quando não tem conteudo dentro do .ok /.notFound precisa do .build

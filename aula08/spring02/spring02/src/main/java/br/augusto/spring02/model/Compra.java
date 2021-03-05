@@ -5,7 +5,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "compra")
@@ -21,6 +25,12 @@ public class Compra {
 
     @Column(name = "valor", nullable = false)
     private double valor;
+
+    @ManyToOne  // relacionamento da tabela / classe Compra com Usuário
+    @JoinColumn(name = "id_usuario")    // nome da coluna que será criada no DB para relacionamento com Usuario
+ // @JsonIgnoreProperties("compras")    // não exibe na tela. Não retorna o atributos compras da tabela / classe Usuario para evitar erro de loop
+    @JsonIgnoreProperties({"compras","senha"})    // {} permite informar um conjunto de informações como se fosse apenas uma informação
+    private Usuario usuario;
 
     public int getId() {
         return id;
@@ -44,6 +54,14 @@ public class Compra {
 
     public void setValor(double valor) {
         this.valor = valor;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
 
 
